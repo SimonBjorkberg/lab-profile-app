@@ -1,22 +1,43 @@
 const router = require('express').Router();
-const { isAuthenticated } = require('../middleware/jwt.middleware')
-const fileUploader = require('../config/cloudinary.config')
+const fileUploader = require('../config/cloudinary.config');
+const User = require('../models/User.model');
 
 router.get('/users', (req, res, next) => {
   //current user
 });
 
-router.put('/users', (req, res, next) => {
-  //current user
-})
+router.put('/users', async (req, res, next) => {
+  try {
+    const { user, image } = req.body;
 
-router.post('/upload', fileUploader.single("imageUrl"), (req, res, next) => {
+    if (!image) {
+      return res.status(200).json({ message: 'No picture provided' });
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(
+      user._id,
+      { image: image },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    res.status(200).json({ message: 'Image updated successfully', user: updatedUser });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: 'An error occurred' });
+  }
+});
+
+router.post('/upload', fileUploader.single('imageUrl'), (req, res, next) => {
   if (!req.file) {
-    next(new Error("no file uploaded"))
-    return
+    next(new Error('No file Uploaded!'));
+    return;
   }
 
-  res.json({ fileUrl: req.file.path })
-})
+  res.json({ fileUrl: req.file.path });
+});
 
 module.exports = router;

@@ -24,15 +24,18 @@ const LogIn = (props) => {
         const token = response.data.authToken;
         storeToken(token);
         authenticateUser();
-        navigate('/');
       })
       .catch((err) => console.log(err));
+    navigate('/profile');
   };
 
   return (
     <div className="login">
       <h1 className="text-3xl mt-5">Log In</h1>
-      <form onSubmit={handleSubmit} className="flex flex-col w-2/3 mx-auto mt-20">
+      <form
+        onSubmit={handleSubmit}
+        className="flex flex-col w-2/3 mx-auto mt-20"
+      >
         <input
           className="my-2 p-2 w-2/3 mx-auto"
           type="text"
@@ -49,7 +52,9 @@ const LogIn = (props) => {
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
-        <button className='mt-10 bg-white w-1/3 mx-auto p-2 rounded-md hover:bg-slate-100'>Log In</button>
+        <button className="mt-10 bg-white w-1/3 mx-auto p-2 rounded-md hover:bg-slate-100">
+          Log In
+        </button>
       </form>
     </div>
   );
