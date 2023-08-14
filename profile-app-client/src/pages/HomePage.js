@@ -1,6 +1,15 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+import { AuthContext } from '../context/auth.context';
+import { useContext } from 'react';
 
 const HomePage = () => {
+  const { user } = useContext(AuthContext)
+  const navigate = useNavigate()
+
+  if (user) {
+    navigate('/profile')
+  }
+
     return (
       <div className="w-1/2 text-left flex flex-col bg-white h-full">
         <div className="w-3/4 mx-auto h-3/4 my-auto">
